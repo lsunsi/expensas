@@ -3,41 +3,58 @@ package com.lsunsi.expensas
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.lsunsi.expensas.ui.theme.ExpensasTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ExpensasTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            colors = TopAppBarDefaults.largeTopAppBarColors(
+                                MaterialTheme.colorScheme.primary
+                            ), title = { Text(text = "Expensas") })
+                    },
+                    content = { padding ->
+                        Surface(modifier = Modifier.padding(padding)) {
+                            Text(text = "meu deus mano como é maneiro isso porra")
+                        }
+                    },
+                    bottomBar = {
+                        NavigationBar(containerColor = MaterialTheme.colorScheme.primary) {
+                            NavigationBarItem(selected = false, onClick = { /*TODO*/ }, label = {
+                                Text("Resumão")
+                            }, icon = {
+                                Icon(Icons.Default.Home, "Resumão")
+                            })
+
+                            NavigationBarItem(selected = false, onClick = { /*TODO*/ }, label = {
+                                Text("Gastos")
+                            }, icon = {
+                                Icon(Icons.Default.List, "Tudão")
+                            })
+
+                            NavigationBarItem(selected = false, onClick = { /*TODO*/ }, label = {
+                                Text("Ajustes")
+                            }, icon = {
+                                Icon(Icons.Default.Settings, "Trecos")
+                            })
+                        }
+                    },
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ExpensasTheme {
-        Greeting("Android")
     }
 }
