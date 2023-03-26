@@ -6,7 +6,5 @@ import androidx.compose.runtime.*
 
 @Composable
 fun Ajustes() {
-
     Text("Ajustes")
-
 }
