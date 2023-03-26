@@ -16,9 +16,9 @@ fun App(state: StateViewModel) {
         topBar = { Bar() },
         bottomBar = { Nav(tab = s.tab, on = state::tabClicked) }
     ) { padding ->
-        Surface(modifier = Modifier.padding(padding)) {
+        Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
             when (s.tab) {
-                Tab.Resumao -> Resumao()
+                Tab.Resumao -> Resumao(s)
                 Tab.Gastos -> Gastos()
                 Tab.Ajustes -> Ajustes()
             }
