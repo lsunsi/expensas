@@ -1,14 +1,17 @@
 package com.lsunsi.expensas
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Text
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Resumao(s: State) {
+fun Resumao(s: State, lancarPressed: () -> Unit) {
     Column(
         Modifier
             .fillMaxSize()
@@ -37,6 +40,18 @@ fun Resumao(s: State) {
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+        }
+
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            ExtendedFloatingActionButton(
+                icon = { Icon(Icons.Default.Add, "Lançar") },
+                text = { Text("Lançar") },
+                onClick = lancarPressed
+            )
         }
     }
 }

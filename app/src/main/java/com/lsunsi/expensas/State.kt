@@ -34,4 +34,8 @@ class StateViewModel : ViewModel() {
     fun tabClicked(tab: Tab) {
         state.update { state -> state.copy(tab = tab) }
     }
+
+    fun lancarPressed() {
+
+    }
 }

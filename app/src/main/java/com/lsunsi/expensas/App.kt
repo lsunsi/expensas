@@ -18,7 +18,7 @@ fun App(state: StateViewModel) {
     ) { padding ->
         Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
             when (s.tab) {
-                Tab.Resumao -> Resumao(s)
+                Tab.Resumao -> Resumao(s, state::lancarPressed)
                 Tab.Gastos -> Gastos()
                 Tab.Ajustes -> Ajustes()
             }
