@@ -1,4 +1,4 @@
-package com.lsunsi.expensas
+package com.lsunsi.expensas.view
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -9,6 +9,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.*
+import com.lsunsi.expensas.state.Tab
 
 @Composable
 fun Nav(tab: Tab, on: (Tab) -> Unit) {

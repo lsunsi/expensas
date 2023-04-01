@@ -1,12 +1,16 @@
-package com.lsunsi.expensas
+package com.lsunsi.expensas.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import com.lsunsi.expensas.state.Expense
+import com.lsunsi.expensas.state.Transfer
 import java.time.Month
 import java.time.OffsetDateTime
+import com.lsunsi.expensas.State
+import com.lsunsi.expensas.util.formatMonth
 
 sealed class Item {
     abstract val createdAt: OffsetDateTime
