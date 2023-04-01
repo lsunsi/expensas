@@ -12,12 +12,8 @@ import androidx.compose.ui.unit.dp
 import com.lsunsi.expensas.State
 
 @Composable
-fun Resumao(s: State, lancarPressed: () -> Unit) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
+fun Summary(s: State, lancarPressed: () -> Unit) {
+    Column(Modifier.padding(16.dp)) {
         Column {
             Text(text = "Olá ${s.me.name}!", style = MaterialTheme.typography.displaySmall)
         }

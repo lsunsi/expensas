@@ -29,7 +29,7 @@ sealed class Item {
 
 @ExperimentalMaterial3Api
 @Composable
-fun Gastos(s: State) {
+fun Statements(s: State) {
     val items = mutableListOf<Item>()
     items.addAll(s.expenses.map(Item::E))
     items.addAll(s.transfers.map(Item::T))

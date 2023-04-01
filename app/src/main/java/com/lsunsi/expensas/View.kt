@@ -1,5 +1,6 @@
 package com.lsunsi.expensas
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.*
@@ -14,16 +15,31 @@ import com.lsunsi.expensas.state.Tab
 fun View(state: StateViewModel) {
     val s by state.s.collectAsState()
 
-    ExpensasTheme {
+    Theme {
         Scaffold(
-            topBar = { Bar() },
-            bottomBar = { Nav(tab = s.tab, on = state::tabClicked) }
+            topBar = { Bar(s.form) },
+            bottomBar = { Nav(tab = s.tab, on = state::tabClicked, s.form) }
         ) { padding ->
-            Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
-                when (s.tab) {
-                    Tab.Resumao -> Resumao(s, state::lancarPressed)
-                    Tab.Gastos -> Gastos(s)
-                    Tab.Ajustes -> Ajustes()
+            s.form?.let {
+                Surface(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    color = MaterialTheme.colorScheme.primary
+                ) {
+                    Post(
+                        it,
+                        discard = state::formDiscardPressed,
+                        toggle = state::formTogglePressed
+                    )
+                }
+            } ?: run {
+                Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
+                    when (s.tab) {
+                        Tab.Summary -> Summary(s, state::lancarPressed)
+                        Tab.Statements -> Statements(s)
+                        Tab.Settings -> Settings()
+                    }
                 }
             }
         }

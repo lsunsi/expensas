@@ -16,7 +16,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun ExpensasTheme(content: @Composable () -> Unit) {
+fun Theme(content: @Composable () -> Unit) {
     val view = LocalView.current
     SideEffect {
         (view.context as Activity).window.statusBarColor = LightColorScheme.primary.toArgb()

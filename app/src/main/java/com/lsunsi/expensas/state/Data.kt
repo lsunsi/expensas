@@ -4,9 +4,9 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 
 enum class Tab {
-    Resumao,
-    Gastos,
-    Ajustes
+    Summary,
+    Statements,
+    Settings
 }
 
 data class Peer(
