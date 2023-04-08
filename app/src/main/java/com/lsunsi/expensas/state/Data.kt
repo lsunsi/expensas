@@ -31,8 +31,8 @@ data class Expense(
     val id: Uuid,
     val creator: Tag,
     val payer: Tag,
-    val split: Unit,
-    val label: Unit,
+    val split: Split,
+    val label: Label,
     val detail: String?,
     val date: LocalDate,
     val paid: UInt,
@@ -41,3 +41,22 @@ data class Expense(
     val refusedAt: OffsetDateTime?,
     val createdAt: OffsetDateTime
 )
+
+enum class Split {
+    Proportional,
+    Arbitrary,
+    Evenly,
+}
+
+enum class Label {
+    Market,
+    Delivery,
+    Transport,
+    Leisure,
+    Water,
+    Internet,
+    Gas,
+    Housing,
+    Electricity,
+    Furnitance,
+}

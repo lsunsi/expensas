@@ -2,10 +2,8 @@ package com.lsunsi.expensas
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.*
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.lsunsi.expensas.view.*
 import com.lsunsi.expensas.state.Tab
@@ -18,19 +16,21 @@ fun View(state: StateViewModel) {
     Theme {
         Scaffold(
             topBar = { Bar(s.form) },
-            bottomBar = { Nav(tab = s.tab, on = state::tabClicked, s.form) }
+            bottomBar = { Nav(tab = s.tab, on = state::tabClicked, s.form) },
+            snackbarHost = { SnackbarHost(s.snackbar.state) },
         ) { padding ->
-            s.form?.let {
+            s.form?.let { form ->
                 Surface(
                     Modifier
                         .fillMaxSize()
                         .padding(padding),
                     color = MaterialTheme.colorScheme.primary
                 ) {
-                    Post(
-                        it,
+                    Submission(
+                        form,
                         discard = state::formDiscardPressed,
-                        toggle = state::formTogglePressed
+                        submitted = state::formSubmitted,
+                        changed = state::formChanged
                     )
                 }
             } ?: run {

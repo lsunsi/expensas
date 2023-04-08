@@ -1,11 +1,11 @@
 package com.lsunsi.expensas
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.lsunsi.expensas.state.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.OffsetDateTime
 
@@ -15,7 +15,8 @@ data class State(
     val so: Peer,
     val expenses: List<Expense>,
     val transfers: List<Transfer>,
-    val form: Form?
+    val form: Form?,
+    val snackbar: Snackbar,
 )
 
 class StateViewModel : ViewModel() {
@@ -29,8 +30,8 @@ class StateViewModel : ViewModel() {
                     id = Uuid("2dcad30c-80c7-4489-9467-3fd269c63244"),
                     creator = Tag("lsunsi"),
                     payer = Tag("aleharit"),
-                    split = Unit,
-                    label = Unit,
+                    split = Split.Proportional,
+                    label = Label.Delivery,
                     detail = null,
                     date = LocalDate.MIN,
                     paid = 123U,
@@ -51,7 +52,8 @@ class StateViewModel : ViewModel() {
                     createdAt = OffsetDateTime.now()
                 )
             ),
-            form = null
+            form = null,
+            snackbar = Snackbar(lifecycle = viewModelScope, SnackbarHostState())
         )
     )
 
@@ -62,14 +64,22 @@ class StateViewModel : ViewModel() {
     }
 
     fun lancarPressed() {
-        state.update { state -> state.copy(form = defaultForm()) }
+        state.update { state -> state.copy(form = Form.default()) }
     }
 
     fun formDiscardPressed() {
         state.update { state -> state.copy(form = null) }
     }
 
-    fun formTogglePressed() {
-        state.update { state -> state.copy(form = state.form?.toggle()) }
+    fun formChanged(form: Form) {
+        state.update { state -> state.copy(form = form) }
+    }
+
+    fun formSubmitted(form: Form) {
+        when (form.finish()) {
+            is Form.Ready.Expense -> s.value.snackbar.formSubmitted()
+            is Form.Ready.Transfer -> s.value.snackbar.formSubmitted()
+            null -> s.value.snackbar.formIncomplete()
+        }
     }
 }
