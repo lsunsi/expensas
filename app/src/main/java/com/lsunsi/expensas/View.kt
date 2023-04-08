@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import com.lsunsi.expensas.view.*
 import com.lsunsi.expensas.state.Tab
 
@@ -14,6 +16,7 @@ fun View(state: StateViewModel) {
     val s by state.s.collectAsState()
 
     Theme {
+        Haptic(s.haptic)
         Scaffold(
             topBar = { Bar(s.form) },
             bottomBar = { Nav(tab = s.tab, on = state::tabClicked, s.form) },

@@ -1,6 +1,7 @@
 package com.lsunsi.expensas
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lsunsi.expensas.state.*
@@ -17,6 +18,7 @@ data class State(
     val transfers: List<Transfer>,
     val form: Form?,
     val snackbar: Snackbar,
+    val haptic: MutableStateFlow<Boolean>
 )
 
 class StateViewModel : ViewModel() {
@@ -53,21 +55,25 @@ class StateViewModel : ViewModel() {
                 )
             ),
             form = null,
-            snackbar = Snackbar(lifecycle = viewModelScope, SnackbarHostState())
+            snackbar = Snackbar(lifecycle = viewModelScope, SnackbarHostState()),
+            haptic = MutableStateFlow(true)
         )
     )
 
     val s: StateFlow<State> = state.asStateFlow()
 
     fun tabClicked(tab: Tab) {
+        s.value.haptic.update { !it }
         state.update { state -> state.copy(tab = tab) }
     }
 
     fun lancarPressed() {
+        s.value.haptic.update { !it }
         state.update { state -> state.copy(form = Form.default()) }
     }
 
     fun formDiscardPressed() {
+        s.value.haptic.update { !it }
         state.update { state -> state.copy(form = null) }
     }
 
@@ -76,10 +82,18 @@ class StateViewModel : ViewModel() {
     }
 
     fun formSubmitted(form: Form) {
+        s.value.haptic.update { !it }
+
         when (form.finish()) {
-            is Form.Ready.Expense -> s.value.snackbar.formSubmitted()
-            is Form.Ready.Transfer -> s.value.snackbar.formSubmitted()
-            null -> s.value.snackbar.formIncomplete()
+            is Form.Ready.Expense -> {
+                s.value.snackbar.formSubmitted()
+            }
+            is Form.Ready.Transfer -> {
+                s.value.snackbar.formSubmitted()
+            }
+            null -> {
+                s.value.snackbar.formIncomplete()
+            }
         }
     }
 }
