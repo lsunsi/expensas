@@ -31,7 +31,8 @@ fun View(state: StateViewModel) {
                 ) {
                     Submission(
                         form,
-                        discard = state::formDiscardPressed,
+                        toggled = state::formToggled,
+                        discard = state::formDiscarded,
                         submitted = state::formSubmitted,
                         changed = state::formChanged
                     )

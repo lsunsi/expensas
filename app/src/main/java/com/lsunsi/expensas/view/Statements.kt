@@ -7,23 +7,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import com.lsunsi.expensas.state.Expense
 import com.lsunsi.expensas.state.Transfer
-import java.time.Month
 import java.time.OffsetDateTime
 import com.lsunsi.expensas.State
-import com.lsunsi.expensas.util.formatMonth
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 sealed class Item {
+    abstract val headline: String
     abstract val createdAt: OffsetDateTime
-    abstract val month: Month
+    abstract val date: LocalDate
 
     data class E(val e: Expense) : Item() {
+        override val headline = e.label.display
         override val createdAt get() = e.createdAt
-        override val month get() = e.date.month!!
+        override val date get() = e.date
     }
 
     data class T(val t: Transfer) : Item() {
+        override val headline = "Transferência"
         override val createdAt get() = t.createdAt
-        override val month get() = t.date.month!!
+        override val date get() = t.date
     }
 }
 
@@ -37,16 +40,20 @@ fun Statements(s: State) {
     items.reverse()
 
     Column {
-        items.groupBy(Item::month).map { entry ->
-            ListItem(headlineText = { Text(formatMonth(entry.key)) })
+        items.groupBy { Pair(it.date.month, it.date.year) }.map { entry ->
+            ListItem(
+                { Text(entry.key.first.display) },
+                supportingText = { Text(entry.key.second.toString()) })
 
             entry.value.map { item ->
-                ListItem(headlineText = {
+                ListItem({ Text(item.headline) }, supportingText = {
+                    Text(item.date.format(DateTimeFormatter.ISO_DATE))
+                }, trailingContent = { Text(
                     when (item) {
-                        is Item.E -> Text("Gasto")
-                        is Item.T -> Text("Transferencia")
+                        is Item.E -> item.e.cost(s.me.tag).display
+                        is Item.T -> "-"
                     }
-                })
+                ) })
             }
         }
     }

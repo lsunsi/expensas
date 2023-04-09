@@ -9,12 +9,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lsunsi.expensas.state.Form
+import java.time.Month
 
 @ExperimentalMaterial3Api
 @Composable
 fun Submission(
     form: Form,
     discard: () -> Unit,
+    toggled: () -> Unit,
     changed: (Form) -> Unit,
     submitted: (Form) -> Unit,
 ) {
@@ -28,7 +30,7 @@ fun Submission(
 
         BottomAppBar(containerColor = MaterialTheme.colorScheme.primaryContainer) {
             IconButton(discard) { Icon(Icons.Default.Close, "Desisti") }
-            IconButton({ changed(form.toggle()) }) { Icon(Icons.Default.Refresh, "Troca") }
+            IconButton(toggled) { Icon(Icons.Default.Refresh, "Troca") }
             Spacer(Modifier.weight(1f))
 
             FloatingActionButton(
@@ -112,3 +114,19 @@ private fun Transfer(
         supportingText = { Text("Quanto você transferiu?") },
         onValueChange = { changed(f.copy(amount = it)) })
 }
+
+val Month.display: String
+    get() = when (this) {
+        Month.JANUARY -> "Janeiro"
+        Month.FEBRUARY -> "Fevereiro"
+        Month.MARCH -> "Março"
+        Month.APRIL -> "Apil"
+        Month.MAY -> "May"
+        Month.JUNE -> "Junho"
+        Month.JULY -> "Julho"
+        Month.AUGUST -> "Agosto"
+        Month.SEPTEMBER -> "Setembro"
+        Month.OCTOBER -> "Outubro"
+        Month.NOVEMBER -> "Novembro"
+        Month.DECEMBER -> "Dezembro"
+    }

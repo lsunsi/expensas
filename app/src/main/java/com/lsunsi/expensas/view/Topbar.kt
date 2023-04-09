@@ -11,9 +11,9 @@ fun Bar(f: Form?) {
         {
             Text(
                 when (f) {
-                    is Form.Expense -> "Gastei \uD83D\uDCB8"
-                    is Form.Transfer -> "Transferi \uD83D\uDCB5"
-                    null -> "Expensas"
+                    is Form.Expense -> "\uD83D\uDCB8 Gastei"
+                    is Form.Transfer -> "\uD83D\uDCB5 Transferi"
+                    null -> "Expensas \uD83D\uDCD2"
                 }
             )
         },
