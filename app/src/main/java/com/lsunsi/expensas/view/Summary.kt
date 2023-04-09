@@ -1,18 +1,15 @@
 package com.lsunsi.expensas.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Text
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lsunsi.expensas.State
 
 @Composable
-fun Summary(s: State, lancarPressed: () -> Unit) {
+fun Summary(s: State) {
     Column(Modifier.padding(16.dp)) {
         Column {
             Text(text = "Olá ${s.me.name}!", style = MaterialTheme.typography.displaySmall)
@@ -37,18 +34,6 @@ fun Summary(s: State, lancarPressed: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-        }
-
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            ExtendedFloatingActionButton(
-                icon = { Icon(Icons.Default.Add, "Lançar") },
-                text = { Text("Lançar") },
-                onClick = lancarPressed
-            )
         }
     }
 }

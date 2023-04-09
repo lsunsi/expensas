@@ -10,7 +10,7 @@ import com.lsunsi.expensas.state.Form
 import com.lsunsi.expensas.state.Tab
 
 @Composable
-fun Nav(tab: Tab, on: (Tab) -> Unit, form: Form?) {
+fun Navbar(tab: Tab, form: Form?, on: (Tab) -> Unit) {
     if (form == null) {
         NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
             NavigationBarItem(

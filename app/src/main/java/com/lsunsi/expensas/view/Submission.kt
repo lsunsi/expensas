@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.lsunsi.expensas.state.Form
-import java.time.Month
 
 @ExperimentalMaterial3Api
 @Composable
@@ -114,19 +113,3 @@ private fun Transfer(
         supportingText = { Text("Quanto você transferiu?") },
         onValueChange = { changed(f.copy(amount = it)) })
 }
-
-val Month.display: String
-    get() = when (this) {
-        Month.JANUARY -> "Janeiro"
-        Month.FEBRUARY -> "Fevereiro"
-        Month.MARCH -> "Março"
-        Month.APRIL -> "Apil"
-        Month.MAY -> "May"
-        Month.JUNE -> "Junho"
-        Month.JULY -> "Julho"
-        Month.AUGUST -> "Agosto"
-        Month.SEPTEMBER -> "Setembro"
-        Month.OCTOBER -> "Outubro"
-        Month.NOVEMBER -> "Novembro"
-        Month.DECEMBER -> "Dezembro"
-    }

@@ -18,8 +18,9 @@ fun View(state: StateViewModel) {
     Theme {
         Haptic(s.haptic)
         Scaffold(
-            topBar = { Bar(s.form) },
-            bottomBar = { Nav(tab = s.tab, on = state::tabClicked, s.form) },
+            topBar = { Topbar(s.form) },
+            floatingActionButton = { Launch(s.tab, s.form, state::launchPressed) },
+            bottomBar = { Navbar(s.tab, s.form, state::tabClicked) },
             snackbarHost = { SnackbarHost(s.snackbar.state) },
         ) { padding ->
             s.form?.let { form ->
@@ -40,7 +41,7 @@ fun View(state: StateViewModel) {
             } ?: run {
                 Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
                     when (s.tab) {
-                        Tab.Summary -> Summary(s, state::lancarPressed)
+                        Tab.Summary -> Summary(s)
                         Tab.Statements -> Statements(s)
                         Tab.Settings -> Settings()
                     }

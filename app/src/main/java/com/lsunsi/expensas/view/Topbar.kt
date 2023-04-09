@@ -6,7 +6,7 @@ import com.lsunsi.expensas.state.Form
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Bar(f: Form?) {
+fun Topbar(f: Form?) {
     TopAppBar(
         {
             Text(

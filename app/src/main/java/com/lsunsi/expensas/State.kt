@@ -66,7 +66,7 @@ class StateViewModel : ViewModel() {
         state.update { state -> state.copy(tab = tab) }
     }
 
-    fun lancarPressed() {
+    fun launchPressed() {
         s.value.haptic.update { !it }
         state.update { state -> state.copy(form = Form.default()) }
     }

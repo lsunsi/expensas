@@ -10,6 +10,7 @@ import com.lsunsi.expensas.state.Transfer
 import java.time.OffsetDateTime
 import com.lsunsi.expensas.State
 import java.time.LocalDate
+import java.time.Month
 import java.time.format.DateTimeFormatter
 
 sealed class Item {
@@ -48,13 +49,31 @@ fun Statements(s: State) {
             entry.value.map { item ->
                 ListItem({ Text(item.headline) }, supportingText = {
                     Text(item.date.format(DateTimeFormatter.ISO_DATE))
-                }, trailingContent = { Text(
-                    when (item) {
-                        is Item.E -> item.e.cost(s.me.tag).display
-                        is Item.T -> "-"
-                    }
-                ) })
+                }, trailingContent = {
+                    Text(
+                        when (item) {
+                            is Item.E -> item.e.cost(s.me.tag).display
+                            is Item.T -> "-"
+                        }
+                    )
+                })
             }
         }
     }
 }
+
+val Month.display: String
+    get() = when (this) {
+        Month.JANUARY -> "Janeiro"
+        Month.FEBRUARY -> "Fevereiro"
+        Month.MARCH -> "Março"
+        Month.APRIL -> "Abril"
+        Month.MAY -> "Maio"
+        Month.JUNE -> "Junho"
+        Month.JULY -> "Julho"
+        Month.AUGUST -> "Agosto"
+        Month.SEPTEMBER -> "Setembro"
+        Month.OCTOBER -> "Outubro"
+        Month.NOVEMBER -> "Novembro"
+        Month.DECEMBER -> "Dezembro"
+    }
