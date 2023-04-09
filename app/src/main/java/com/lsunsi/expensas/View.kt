@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import com.lsunsi.expensas.view.*
 import com.lsunsi.expensas.state.Tab
 
@@ -20,7 +18,20 @@ fun View(state: StateViewModel) {
         Scaffold(
             topBar = { Topbar(s.form) },
             floatingActionButton = { Launch(s.tab, s.form, state::launchPressed) },
-            bottomBar = { Navbar(s.tab, s.form, state::tabClicked) },
+            bottomBar = {
+                Bottombar(
+                    s,
+                    nav = { Navbar(s.tab, s.form, state::tabClicked) },
+                    form = {
+                        Formbar(
+                            s.form,
+                            state::formToggled,
+                            state::formDiscarded,
+                            state::formSubmitted
+                        )
+                    }
+                )
+            },
             snackbarHost = { SnackbarHost(s.snackbar.state) },
         ) { padding ->
             s.form?.let { form ->
@@ -29,15 +40,7 @@ fun View(state: StateViewModel) {
                         .fillMaxSize()
                         .padding(padding),
                     color = MaterialTheme.colorScheme.primary
-                ) {
-                    Submission(
-                        form,
-                        toggled = state::formToggled,
-                        discard = state::formDiscarded,
-                        submitted = state::formSubmitted,
-                        changed = state::formChanged
-                    )
-                }
+                ) { Form(form, state::formChanged) }
             } ?: run {
                 Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
                     when (s.tab) {

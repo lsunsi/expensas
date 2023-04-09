@@ -17,7 +17,7 @@ data class State(
     val transfers: List<Transfer>,
     val form: Form?,
     val snackbar: Snackbar,
-    val haptic: MutableStateFlow<Boolean>
+    val haptic: Haptic,
 )
 
 class StateViewModel : ViewModel() {
@@ -55,24 +55,24 @@ class StateViewModel : ViewModel() {
             ),
             form = null,
             snackbar = Snackbar(lifecycle = viewModelScope, SnackbarHostState()),
-            haptic = MutableStateFlow(true)
+            haptic = Haptic()
         )
     )
 
     val s: StateFlow<State> = state.asStateFlow()
 
     fun tabClicked(tab: Tab) {
-        s.value.haptic.update { !it }
+        s.value.haptic.tick()
         state.update { state -> state.copy(tab = tab) }
     }
 
     fun launchPressed() {
-        s.value.haptic.update { !it }
+        s.value.haptic.tick()
         state.update { state -> state.copy(form = Form.default()) }
     }
 
     fun formDiscarded() {
-        s.value.haptic.update { !it }
+        s.value.haptic.tick()
         state.update { state -> state.copy(form = null) }
     }
 
@@ -81,12 +81,12 @@ class StateViewModel : ViewModel() {
     }
 
     fun formToggled() {
-        s.value.haptic.update { !it }
+        s.value.haptic.tick()
         state.update { state -> state.copy(form = state.form?.toggle()) }
     }
 
     fun formSubmitted(form: Form) {
-        s.value.haptic.update { !it }
+        s.value.haptic.tick()
 
         when (val ready = form.finish()) {
             is Form.Ready.Expense -> {
