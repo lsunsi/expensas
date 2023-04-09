@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.lsunsi.expensas.State
 
 @Composable
-fun Summary(s: State) {
+fun HomeTab(s: State) {
     Column(Modifier.padding(16.dp)) {
         Column {
             Text(text = "Olá ${s.me.name}!", style = MaterialTheme.typography.displaySmall)

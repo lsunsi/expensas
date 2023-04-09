@@ -23,7 +23,7 @@ data class State(
 class StateViewModel : ViewModel() {
     private val state = MutableStateFlow(
         State(
-            Tab.Summary,
+            Tab.Home,
             Peer(Tag("lsunsi"), "Lu"),
             Peer(Tag("aleharit"), "Alê"),
             expenses = listOf(

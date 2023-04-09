@@ -10,7 +10,7 @@ import com.lsunsi.expensas.state.Form
 
 @ExperimentalMaterial3Api
 @Composable
-fun Form(
+fun FormView(
     form: Form,
     changed: (Form) -> Unit,
 ) {

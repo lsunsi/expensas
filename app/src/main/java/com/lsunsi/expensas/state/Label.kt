@@ -32,5 +32,5 @@ enum class Label {
         override val display = "Coisas da casa"
     };
 
-    abstract val display: String;
+    abstract val display: String
 }

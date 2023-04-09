@@ -4,8 +4,8 @@ import java.time.LocalDate
 import java.time.OffsetDateTime
 
 enum class Tab {
-    Summary,
-    Statements,
+    Home,
+    Items,
     Settings
 }
 

@@ -16,14 +16,14 @@ fun View(state: StateViewModel) {
     Theme {
         Haptic(s.haptic)
         Scaffold(
-            topBar = { Topbar(s.form) },
-            floatingActionButton = { Launch(s.tab, s.form, state::launchPressed) },
+            topBar = { TopBar(s.form) },
+            floatingActionButton = { LaunchButton(s.tab, s.form, state::launchPressed) },
             bottomBar = {
-                Bottombar(
+                BottomBar(
                     s,
-                    nav = { Navbar(s.tab, s.form, state::tabClicked) },
+                    nav = { NavBottomBar(s.tab, s.form, state::tabClicked) },
                     form = {
-                        Formbar(
+                        FormBottomBar(
                             s.form,
                             state::formToggled,
                             state::formDiscarded,
@@ -40,13 +40,13 @@ fun View(state: StateViewModel) {
                         .fillMaxSize()
                         .padding(padding),
                     color = MaterialTheme.colorScheme.primary
-                ) { Form(form, state::formChanged) }
+                ) { FormView(form, state::formChanged) }
             } ?: run {
                 Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
                     when (s.tab) {
-                        Tab.Summary -> Summary(s)
-                        Tab.Statements -> Statements(s)
-                        Tab.Settings -> Settings()
+                        Tab.Home -> HomeTab(s)
+                        Tab.Items -> ItemsTab(s)
+                        Tab.Settings -> SettingsTab()
                     }
                 }
             }

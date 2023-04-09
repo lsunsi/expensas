@@ -7,7 +7,7 @@ import androidx.compose.runtime.*
 import com.lsunsi.expensas.State
 
 @Composable
-fun Bottombar(
+fun BottomBar(
     s: State,
     nav: @Composable () -> Unit,
     form: @Composable () -> Unit,
