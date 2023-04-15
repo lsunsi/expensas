@@ -3,10 +3,23 @@ package com.lsunsi.expensas.state
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-sealed class Form {
+data class Form(
+    val open: Boolean,
+    val kind: Kind,
+    val date: String,
+    val amount: String,
+    val payer: String,
+    val label: String,
+    val split: String,
+    val detail: String
+) {
+    enum class Kind { Expense, Transfer }
+
     companion object {
-        fun default(): Form {
-            return Expense(
+        fun default(open: Boolean): Form {
+            return Form(
+                open = open,
+                kind = Kind.Expense,
                 date = "",
                 amount = "",
                 payer = "",
@@ -16,8 +29,6 @@ sealed class Form {
             )
         }
     }
-
-    abstract fun finish(): Ready?
 
     sealed class Ready {
         data class Expense(
@@ -31,50 +42,25 @@ sealed class Form {
         ) : Ready()
     }
 
-    data class Expense(
-        val date: String,
-        val amount: String,
-        val payer: String,
-        val label: String,
-        val split: String,
-        val detail: String
-    ) : Form() {
-        override fun finish(): Ready.Expense? {
-            val date = runCatching { LocalDate.parse(date, DateTimeFormatter.ISO_DATE) }.getOrNull()
-                ?: return null
+    fun finish(): Ready? {
+        val date = runCatching { LocalDate.parse(date, DateTimeFormatter.ISO_DATE) }.getOrNull()
+            ?: return null
 
-            val amount = amount.toUIntOrNull() ?: return null
+        val amount = amount.toUIntOrNull() ?: return null
 
-            return Ready.Expense(date, amount)
-        }
-    }
-
-    data class Transfer(val date: String, val amount: String) : Form() {
-        override fun finish(): Ready.Transfer? {
-            val date = runCatching { LocalDate.parse(date, DateTimeFormatter.ISO_DATE) }.getOrNull()
-                ?: return null
-
-            val amount = amount.toUIntOrNull() ?: return null
-
-            return Ready.Transfer(date, amount)
-        }
+        return Ready.Transfer(date, amount)
     }
 
     fun toggle(): Form {
-        return when (this) {
-            is Expense -> {
-                Transfer(date = this.date, amount = this.amount)
+        return copy(
+            kind = when (this.kind) {
+                Kind.Transfer -> Kind.Expense
+                Kind.Expense -> Kind.Transfer
             }
-            is Transfer -> {
-                Expense(
-                    date = this.date,
-                    amount = this.amount,
-                    payer = "",
-                    detail = "",
-                    split = "",
-                    label = ""
-                )
-            }
-        }
+        )
+    }
+
+    fun close(): Form {
+        return copy(open = false)
     }
 }

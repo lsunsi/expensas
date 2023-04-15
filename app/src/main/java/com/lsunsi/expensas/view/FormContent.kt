@@ -1,6 +1,10 @@
 package com.lsunsi.expensas.view
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -10,14 +14,28 @@ import com.lsunsi.expensas.state.Form
 
 @ExperimentalMaterial3Api
 @Composable
-fun FormView(
+fun FormContent(
     form: Form,
     changed: (Form) -> Unit,
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        when (form) {
-            is Form.Expense -> Expense(form, changed)
-            is Form.Transfer -> Transfer(form, changed)
+
+    AnimatedVisibility(
+        visible = form.kind == Form.Kind.Expense,
+        enter = slideInHorizontally(initialOffsetX = { -it }),
+        exit = slideOutHorizontally(targetOffsetX = { -it })
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Expense(form, changed)
+        }
+    }
+
+    AnimatedVisibility(
+        visible = form.kind == Form.Kind.Transfer,
+        enter = slideInHorizontally(initialOffsetX = { it }),
+        exit = slideOutHorizontally(targetOffsetX = { it })
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Transfer(form, changed)
         }
     }
 }
@@ -25,8 +43,8 @@ fun FormView(
 @ExperimentalMaterial3Api
 @Composable
 private fun Expense(
-    f: Form.Expense,
-    changed: (Form.Expense) -> Unit,
+    f: Form,
+    changed: (Form) -> Unit,
 ) {
     TextField(modifier = Modifier.padding(0.dp, 8.dp),
         colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -74,8 +92,8 @@ private fun Expense(
 @ExperimentalMaterial3Api
 @Composable
 private fun Transfer(
-    f: Form.Transfer,
-    changed: (Form.Transfer) -> Unit,
+    f: Form,
+    changed: (Form) -> Unit,
 ) {
     TextField(modifier = Modifier.padding(0.dp, 8.dp),
         colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),

@@ -1,12 +1,8 @@
 package com.lsunsi.expensas
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import com.lsunsi.expensas.view.*
-import com.lsunsi.expensas.state.Tab
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -17,7 +13,14 @@ fun View(state: StateViewModel) {
         Haptic(s.haptic)
         Scaffold(
             topBar = { TopBar(s.form) },
-            floatingActionButton = { LaunchButton(s.tab, s.form, state::launchPressed) },
+            floatingActionButton = {
+                LaunchButton(
+                    s.tab,
+                    s.form,
+                    s.snackbar.state,
+                    state::launchPressed
+                )
+            },
             bottomBar = {
                 BottomBar(
                     s,
@@ -33,23 +36,6 @@ fun View(state: StateViewModel) {
                 )
             },
             snackbarHost = { SnackbarHost(s.snackbar.state) },
-        ) { padding ->
-            s.form?.let { form ->
-                Surface(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    color = MaterialTheme.colorScheme.primary
-                ) { FormView(form, state::formChanged) }
-            } ?: run {
-                Surface(Modifier.padding(padding), color = MaterialTheme.colorScheme.background) {
-                    when (s.tab) {
-                        Tab.Home -> HomeTab(s)
-                        Tab.Items -> ItemsTab(s)
-                        Tab.Settings -> SettingsTab()
-                    }
-                }
-            }
-        }
+        ) { padding -> Content(padding, s, state::formChanged) }
     }
 }

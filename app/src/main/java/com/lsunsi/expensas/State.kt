@@ -13,9 +13,9 @@ data class State(
     val tab: Tab,
     val me: Peer,
     val so: Peer,
+    val form: Form,
     val expenses: List<Expense>,
     val transfers: List<Transfer>,
-    val form: Form?,
     val snackbar: Snackbar,
     val haptic: Haptic,
 )
@@ -53,7 +53,7 @@ class StateViewModel : ViewModel() {
                     createdAt = OffsetDateTime.now()
                 )
             ),
-            form = null,
+            form = Form.default(false),
             snackbar = Snackbar(lifecycle = viewModelScope, SnackbarHostState()),
             haptic = Haptic()
         )
@@ -68,12 +68,12 @@ class StateViewModel : ViewModel() {
 
     fun launchPressed() {
         s.value.haptic.tick()
-        state.update { state -> state.copy(form = Form.default()) }
+        state.update { state -> state.copy(form = Form.default(true)) }
     }
 
     fun formDiscarded() {
         s.value.haptic.tick()
-        state.update { state -> state.copy(form = null) }
+        state.update { state -> state.copy(form = state.form.close()) }
     }
 
     fun formChanged(form: Form) {
@@ -82,7 +82,7 @@ class StateViewModel : ViewModel() {
 
     fun formToggled() {
         s.value.haptic.tick()
-        state.update { state -> state.copy(form = state.form?.toggle()) }
+        state.update { state -> state.copy(form = state.form.toggle()) }
     }
 
     fun formSubmitted(form: Form) {
@@ -93,7 +93,7 @@ class StateViewModel : ViewModel() {
                 s.value.snackbar.formSubmitted()
                 state.updateAndGet { state ->
                     state.copy(
-                        form = null, expenses = state.expenses + Expense(
+                        form = state.form.close(), expenses = state.expenses + Expense(
                             id = Uuid(UUID.randomUUID().toString()),
                             creator = state.me.tag,
                             payer = state.me.tag,
@@ -114,7 +114,7 @@ class StateViewModel : ViewModel() {
                 s.value.snackbar.formSubmitted()
                 state.updateAndGet { state ->
                     state.copy(
-                        form = null, transfers = state.transfers + Transfer(
+                        form = state.form.close(), transfers = state.transfers + Transfer(
                             id = Uuid(UUID.randomUUID().toString()),
                             sender = state.me.tag,
                             date = ready.date,

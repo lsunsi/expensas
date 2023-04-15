@@ -22,8 +22,8 @@ fun NavBottomBar(tab: Tab, form: Form?, on: (Tab) -> Unit) {
         NavigationBarItem(
             selected = tab == Tab.Items,
             onClick = { on(Tab.Items) },
-            label = { Text("Gastos") },
-            icon = { Icon(Icons.Default.List, "Gastos") }
+            label = { Text("Extrato") },
+            icon = { Icon(Icons.Default.List, "Extrato") }
         )
 
         NavigationBarItem(
