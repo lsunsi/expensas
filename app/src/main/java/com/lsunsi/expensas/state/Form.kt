@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 data class Form(
-    val open: Boolean,
+    var open: Boolean,
     val kind: Kind,
     val date: String,
     val amount: String,
