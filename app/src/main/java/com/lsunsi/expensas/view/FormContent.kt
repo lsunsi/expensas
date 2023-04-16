@@ -5,10 +5,15 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.lsunsi.expensas.state.Form
 
@@ -46,47 +51,12 @@ private fun Expense(
     f: Form,
     changed: (Form) -> Unit,
 ) {
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
-        colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.date,
-        label = { Text("Data") },
-        supportingText = { Text("Que dia você pagou?") },
-        onValueChange = { changed(f.copy(date = it)) })
-
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
-        colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.payer,
-        label = { Text("Pagante") },
-        supportingText = { Text("Quem pagou?") },
-        onValueChange = { changed(f.copy(payer = it)) })
-
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
-        colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.label,
-        label = { Text("Etiqueta") },
-        supportingText = { Text("Qual o tipo do gasto?") },
-        onValueChange = { changed(f.copy(label = it)) })
-
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
-        colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.split,
-        label = { Text("Divisão") },
-        supportingText = { Text("Qual o tipo da divisão?") },
-        onValueChange = { changed(f.copy(split = it)) })
-
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
-        colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.detail,
-        label = { Text("Detalhe") },
-        supportingText = { Text("Algum detalhe extra?") },
-        onValueChange = { changed(f.copy(detail = it)) })
-
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
-        colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.amount,
-        label = { Text("Valor") },
-        supportingText = { Text("Quanto foi pago?") },
-        onValueChange = { changed(f.copy(amount = it)) })
+    Field("Data", "Que dia você pagou?", f.date) { changed(f.copy(date = it)) }
+    Field("Pagante", "Quem pagou?", f.payer) { changed(f.copy(payer = it)) }
+    Field("Etiqueta", "Como classificar o gasto?", f.label) { changed(f.copy(label = it)) }
+    Field("Divisão", "Como vai ser a divisão?", f.split) { changed(f.copy(split = it)) }
+    Field("Detalhe", "Algum detalhe extra?", f.detail) { changed(f.copy(detail = it)) }
+    Field("Valor", "Quanto foi pago?", f.amount, true) { changed(f.copy(amount = it)) }
 }
 
 @ExperimentalMaterial3Api
@@ -95,17 +65,28 @@ private fun Transfer(
     f: Form,
     changed: (Form) -> Unit,
 ) {
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
-        colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.date,
-        label = { Text("Data") },
-        supportingText = { Text("Que dia você transferiu?") },
-        onValueChange = { changed(f.copy(date = it)) })
+    Field("Data", "Que dia foi transferido?", f.date) { changed(f.copy(date = it)) }
+    Field("Valor", "Quanto você transferiu?", f.amount, true) { changed(f.copy(amount = it)) }
+}
 
-    TextField(modifier = Modifier.padding(0.dp, 8.dp),
+@ExperimentalMaterial3Api
+@Composable
+private fun <T> Field(
+    label: String,
+    text: String,
+    f: Form.Field<T>,
+    last: Boolean = false,
+    changed: (Form.Field<T>) -> Unit,
+) {
+    TextField(
+        modifier = Modifier
+            .padding(0.dp, 8.dp)
+            .onFocusChanged { changed(f.focus(it.isFocused)) },
+        onValueChange = { changed(f.update(it)) },
         colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        value = f.amount,
-        label = { Text("Valor") },
-        supportingText = { Text("Quanto você transferiu?") },
-        onValueChange = { changed(f.copy(amount = it)) })
+        keyboardOptions = KeyboardOptions(imeAction = if (last) ImeAction.Done else ImeAction.Next),
+        label = { Text(label) }, supportingText = { Text(text) },
+        trailingIcon = { if (f.success) Icon(Icons.Default.Check, contentDescription = "Check") },
+        singleLine = true, value = f.raw, isError = f.error,
+    )
 }

@@ -37,7 +37,7 @@ class StateViewModel : ViewModel() {
                     payer = Peer.Tag("aleharit"),
                     split = Split.Proportional,
                     label = Label.Delivery,
-                    detail = null,
+                    detail = "",
                     paid = Cents(123456U),
                     owed = Cents(1234531233U),
                 ), Item.Transfer(
@@ -49,7 +49,7 @@ class StateViewModel : ViewModel() {
                     amount = 55U,
                 )
             ),
-            form = Form.default(false),
+            form = Form.closed(),
             snackbar = Snackbar(lifecycle = viewModelScope, SnackbarHostState()),
             haptic = Haptic()
         )
@@ -64,7 +64,7 @@ class StateViewModel : ViewModel() {
 
     fun launchPressed() {
         s.value.haptic.tick()
-        state.update { it.copy(form = Form.default(true)) }
+        state.update { it.copy(form = Form.open(setOf(it.me.tag.t, it.so.tag.t))) }
     }
 
     fun formDiscarded() {
@@ -95,10 +95,10 @@ class StateViewModel : ViewModel() {
                             verdict = null,
                             ts = OffsetDateTime.now(),
                             creator = it.me.tag,
-                            payer = it.me.tag,
-                            split = Split.Proportional,
-                            label = Label.Delivery,
-                            detail = null,
+                            payer = it.me.tag, // TODO
+                            split = ready.split,
+                            label = ready.label,
+                            detail = ready.detail,
                             paid = Cents(ready.amount),
                             owed = Cents(ready.amount),
                         )

@@ -29,7 +29,7 @@ sealed class Item {
         val payer: Peer.Tag,
         val split: Split,
         val label: Label,
-        val detail: String?,
+        val detail: String,
         val paid: Cents,
         val owed: Cents,
     ) : Item() {
